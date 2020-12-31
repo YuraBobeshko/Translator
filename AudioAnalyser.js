@@ -8,21 +8,12 @@ const AudioAnalyser = ({ audio }) => {
 
   let dataArray;
 
-  // this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  // this.source = this.audioContext.createMediaStreamSource(this.props.audio);
-  // this.analyser = this.audioContext.createAnalyser();
-  // this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
-
   analyser.fftSize = 32;
   source.connect(analyser);
   source.connect(processor);
   //   analyser.connect(audioContext.destination); for hearing himself
   processor.connect(audioContext.destination);
   dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-  setTimeout(() => {
-    processor.stop();
-  }, 1000);
 
   processor.onaudioprocess = () => {
     analyser.getByteFrequencyData(dataArray);
