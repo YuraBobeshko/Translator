@@ -20,7 +20,7 @@ const AudioAnalyser = ({ audio }) => {
     console.log(dataArray);
   };
 
-  return <div></div>;
+  return null;
 };
 
 export default AudioAnalyser;
