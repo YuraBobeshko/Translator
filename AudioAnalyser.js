@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+import { Text } from "react-native";
+
+const value = [];
 
 const AudioAnalyser = ({ audio }) => {
   useEffect(() => {
@@ -19,14 +22,15 @@ const AudioAnalyser = ({ audio }) => {
 
     processor.onaudioprocess = () => {
       analyser.getByteFrequencyData(dataArray);
-      console.log(dataArray);
+
+      console.log(dataArray.join(" "));
     };
     return () => {
       processor.onaudioprocess = null;
     };
   });
 
-  return null;
+  return <Text>{value.join(" ")}</Text>;
 };
 
 export default AudioAnalyser;

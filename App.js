@@ -4,7 +4,6 @@ import AudioAnalyser from "./AudioAnalyser";
 
 export default function App() {
   const [audio, setAudio] = useState(null);
-
   const getMicrophone = async () => {
     const audio = await navigator.mediaDevices.getUserMedia({
       audio: true,
