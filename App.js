@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, View, Text } from "react-native";
 import AudioAnalyser from "./AudioAnalyser";
 
+const styles = StyleSheet.create({
+  block: {
+    weight: 100,
+    height: 100,
+    color: "red",
+  },
+});
+
 export default function App() {
   const [height, setHeight] = useState(0);
   const [audio, setAudio] = useState(null);
@@ -34,16 +42,33 @@ export default function App() {
       getMicrophone();
     }
   };
-  // console.log(audio);
+
   return (
-    <View>
-      <Button onPress={toggleMicrophone} title={"setIsWriting"} />
+    <View
+      style={{
+        margin: 5,
+      }}
+    >
+      <Button
+        style={{
+          marginBottom: 500,
+        }}
+        onPress={toggleMicrophone}
+        title={"setIsWriting"}
+      />
       {audio && (
         <AudioAnalyser height={height} setHeight={setHeight} audio={audio} />
       )}
-      <Text>{height}</Text>
+      <View
+        style={{
+          width: 100,
+          height: 100,
+          backgroundColor: "red",
+          marginTop: height * 1.5,
+        }}
+      >
+        <Text>{height}</Text>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

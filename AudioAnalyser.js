@@ -10,10 +10,16 @@ const AudioAnalyser = memo(({ setHeight, height, audio }) => {
     source;
 
   const tick = () => {
-    analyser.getByteTimeDomainData(dataArray);
+    analyser.getByteFrequencyData(dataArray);
     // setAudioData(dataArray);
-    setHeight((prevHeight) => prevHeight + 1);
-    console.log(dataArray);
+    const value =
+      dataArray.reduce((sum, num) => sum + num, 0) / dataArray.length > 50
+        ? 1
+        : -1;
+    setHeight((prevHeight) => prevHeight + value);
+    console.log(
+      dataArray.reduce((sum, num) => sum + num, 0) / dataArray.length
+    );
     rafId = requestAnimationFrame(tick);
   };
 
@@ -21,6 +27,7 @@ const AudioAnalyser = memo(({ setHeight, height, audio }) => {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 32;
+    // analyser.connect(audioContext.destination);
     dataArray = new Uint8Array(analyser.frequencyBinCount);
     source = audioContext.createMediaStreamSource(audio);
     source.connect(analyser);
@@ -35,7 +42,7 @@ const AudioAnalyser = memo(({ setHeight, height, audio }) => {
     };
   }, []);
 
-  console.log(dataArray);
+  // console.log(dataArray);
 
   return null;
 });
