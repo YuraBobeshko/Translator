@@ -1,9 +1,19 @@
-import React, { useState } from "react";
-import { Button, StyleSheet, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Button, StyleSheet, View, Text } from "react-native";
 import AudioAnalyser from "./AudioAnalyser";
 
 export default function App() {
+  const [height, setHeight] = useState(0);
   const [audio, setAudio] = useState(null);
+
+  // useEffect(() => {
+  //   const cycle = setInterval(() => {
+  //     console.log(height, state);
+  //     setHeight((prevHeight) => prevHeight + state);
+  //   }, 300);
+  //   return () => clearInterval(cycle);
+  // }, []);
+
   const getMicrophone = async () => {
     const audio = await navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -24,11 +34,14 @@ export default function App() {
       getMicrophone();
     }
   };
-  console.log(audio);
+  // console.log(audio);
   return (
     <View>
       <Button onPress={toggleMicrophone} title={"setIsWriting"} />
-      {audio && <AudioAnalyser audio={audio} />}
+      {audio && (
+        <AudioAnalyser height={height} setHeight={setHeight} audio={audio} />
+      )}
+      <Text>{height}</Text>
     </View>
   );
 }

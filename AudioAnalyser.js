@@ -1,36 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { Text } from "react-native";
 
-const value = [];
+const AudioAnalyser = memo(({ setHeight, height, audio }) => {
+  // const [audioData, setAudioData] = useState(new Uint8Array(0));
+  let rafId,
+    audioContext,
+    analyser,
+    dataArray = new Uint8Array(0),
+    source;
 
-const AudioAnalyser = ({ audio }) => {
+  const tick = () => {
+    analyser.getByteTimeDomainData(dataArray);
+    // setAudioData(dataArray);
+    setHeight((prevHeight) => prevHeight + 1);
+    console.log(dataArray);
+    rafId = requestAnimationFrame(tick);
+  };
+
   useEffect(() => {
-    const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)(),
-      source = audioContext.createMediaStreamSource(audio),
-      analyser = audioContext.createAnalyser(),
-      processor = audioContext.createScriptProcessor(2048, 1, 1);
-
-    let dataArray;
-
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
     analyser.fftSize = 32;
-    source.connect(analyser);
-    source.connect(processor);
-    //   analyser.connect(audioContext.destination); for hearing himself
-    processor.connect(audioContext.destination);
     dataArray = new Uint8Array(analyser.frequencyBinCount);
+    source = audioContext.createMediaStreamSource(audio);
+    source.connect(analyser);
+    rafId = requestAnimationFrame(tick);
+  }, []);
 
-    processor.onaudioprocess = () => {
-      analyser.getByteFrequencyData(dataArray);
-
-      console.log(dataArray.join(" "));
-    };
+  useEffect(() => {
     return () => {
-      processor.onaudioprocess = null;
+      cancelAnimationFrame(rafId);
+      analyser.disconnect();
+      source.disconnect();
     };
-  });
+  }, []);
 
-  return <Text>{value.join(" ")}</Text>;
-};
+  console.log(dataArray);
+
+  return null;
+});
 
 export default AudioAnalyser;
