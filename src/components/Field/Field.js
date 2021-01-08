@@ -22,7 +22,7 @@ const Field = ({ height, audio, toggleMicrophone }) => {
           refLineTop.current.getBoundingClientRect().top
       ) {
         console.log(1);
-        alert("лузер");
+        // alert("лузер");
       }
       //   if (
       //     refBlock.current.getBoundingClientRect().bottom >

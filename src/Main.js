@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-native";
 import { Field } from "./components";
 import AudioAnalyser from "./hooks/AudioAnalyser";
@@ -31,6 +31,7 @@ const Main = () => {
   return (
     <>
       <Button onPress={toggleMicrophone} title={audio ? "pause" : "start"} />
+
       <Field
         height={height}
         audio={audio}

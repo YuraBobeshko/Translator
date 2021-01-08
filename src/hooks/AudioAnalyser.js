@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const AudioAnalyser = (audio) => {
   const [height, setHeight] = useState(200);
-
+  console.log(audio);
   let rafId,
     audioContext,
     analyser,
