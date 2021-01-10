@@ -5,7 +5,8 @@ import AudioAnalyser from "./hooks/AudioAnalyser";
 
 const Main = () => {
   const [audio, setAudio] = useState(null);
-  const height = AudioAnalyser(audio);
+  const [res, setRes] = useState(false);
+  const height = AudioAnalyser(audio, res);
 
   const getMicrophone = async () => {
     const audio = await navigator.mediaDevices.getUserMedia({
@@ -35,7 +36,10 @@ const Main = () => {
       <Field
         height={height}
         audio={audio}
-        toggleMicrophone={toggleMicrophone}
+        onLose={() => {
+          setRes((prevState) => !prevState);
+          toggleMicrophone();
+        }}
       />
     </>
   );

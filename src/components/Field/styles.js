@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   wrapperField: {
-    // margin: 5,
     width: 500,
     height: 700,
     backgroundColor: "yellow",

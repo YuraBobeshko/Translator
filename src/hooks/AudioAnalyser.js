@@ -1,29 +1,37 @@
 import { useEffect, useState } from "react";
 
-const AudioAnalyser = (audio) => {
+const getNormalizedValue = (dataArray) =>
+  dataArray.reduce((sum, num) => sum + num, 0) / dataArray.length > 40 ? -1 : 1;
+
+const AudioAnalyser = (audio, res) => {
   const [height, setHeight] = useState(200);
-  console.log(audio);
-  let rafId,
-    audioContext,
-    analyser,
-    dataArray = new Uint8Array(0),
-    source;
+
+  useEffect(() => {
+    setHeight(200);
+  }, [res]);
+
+  let rafId, audioContext, analyser, dataArray, source;
 
   const tick = () => {
-    analyser.getByteFrequencyData(dataArray);
+    if (audio.active) {
+      analyser.getByteFrequencyData(dataArray);
+      const value = getNormalizedValue(dataArray);
 
-    const value =
-      dataArray.reduce((sum, num) => sum + num, 0) / dataArray.length > 40
-        ? 1
-        : -1;
-
-    setHeight((prevHeight) => {
-      const sum = prevHeight + value;
-      if (sum > 378 && sum < 380) return 378;
-      if (sum > -2 && sum < 0) return 1;
-      return sum;
-    });
-    rafId = requestAnimationFrame(tick);
+      setHeight((prevHeight) => {
+        const sum = prevHeight + value;
+        if (sum > 378 && sum < 380) return 378;
+        if (sum > -2 && sum < 0) return 1;
+        return sum;
+      });
+      rafId = requestAnimationFrame(tick);
+    } else {
+      setHeight((prevHeight) => {
+        const sum = prevHeight;
+        if (sum > 378 && sum < 380) return 200;
+        if (sum > -2 && sum < 0) return 200;
+        return prevHeight;
+      });
+    }
   };
 
   useEffect(() => {

@@ -1,9 +1,21 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Animated, Easing } from "react-native";
 
 import styles from "./styles";
 
-const Field = ({ height, audio, toggleMicrophone }) => {
+const Field = ({ height, audio, onLose }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 2000,
+        easing: Easing.linear,
+      })
+    ).start();
+  }, [fadeAnim]);
+
   const refBlock = useRef();
   const refLineBottom = useRef();
   const refLineTop = useRef();
@@ -21,35 +33,28 @@ const Field = ({ height, audio, toggleMicrophone }) => {
         refBlock.current.getBoundingClientRect().bottom >
           refLineTop.current.getBoundingClientRect().top
       ) {
-        console.log(1);
-        // alert("лузер");
+        onLose();
+        alert("лузер");
       }
-      //   if (
-      //     refBlock.current.getBoundingClientRect().bottom >
-      //     refBarrier.current.getBoundingClientRect().top
-      //   ) {
-      //     console.log(
-      //       refBlock.current.getBoundingClientRect().bottom,
-      //       refBarrier.current.getBoundingClientRect().top
-      //     );
-      //     alert("лузер");
-      //     toggleMicrophone();
-      //   }
-      console.log(
-        refLineBottom.current.getBoundingClientRect().top,
-        refBlock.current.getBoundingClientRect().bottom,
-        refLineTop.current.getBoundingClientRect().top
-      );
     }
   }, [height]);
+  console.log(fadeAnim);
   return (
     <View style={styles.wrapperField}>
-      <View
+      <Animated.View
         ref={refLineBottom}
         style={[
           styles.line,
           {
-            top: 50,
+            top: fadeAnim
+              .interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 3],
+              })
+              .interpolate({
+                inputRange: [1, 2, 3],
+                outputRange: [50, 200, 50],
+              }),
           },
         ]}
       />
@@ -62,14 +67,22 @@ const Field = ({ height, audio, toggleMicrophone }) => {
           },
         ]}
       >
-        <Text style={styles.text}>{height}</Text>
+        <Text style={styles.text}>{-(height - 700)}</Text>
       </View>
-      <View
+      <Animated.View
         ref={refLineTop}
         style={[
           styles.line,
           {
-            top: 600,
+            top: fadeAnim
+              .interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 3],
+              })
+              .interpolate({
+                inputRange: [1, 2, 3],
+                outputRange: [450, 600, 450],
+              }),
           },
         ]}
       />
