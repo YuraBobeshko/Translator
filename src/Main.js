@@ -1,46 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "react-native";
-import { Field } from "./components";
+import React, { useState, useCallback } from "react";
+import { Button, View } from "react-native";
+import { Settings } from "./components";
+import { FieldBottomTopLine } from "./components/Fields";
+import globalStyles from "./globalStyles";
 import AudioAnalyser from "./hooks/AudioAnalyser";
 
 const Main = () => {
-  const [audio, setAudio] = useState(null);
-  const [res, setRes] = useState(false);
-  const height = AudioAnalyser(audio, res);
+  const [data, setData] = useState({
+    height: 200,
+    volum: 1,
+    isPlaying: false,
+    sensitivityMicrophone: 40,
+  });
 
-  const getMicrophone = async () => {
-    const audio = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false,
-    });
-    setAudio(audio);
+  const { height, volum, sensitivityMicrophone, isPlaying } = AudioAnalyser(
+    data,
+    setData
+  );
+
+  const onLose = useCallback(() => {
+    setData((prevState) => ({
+      ...prevState,
+      height: 200,
+      isPlaying: false,
+    }));
+  });
+
+  const setSensitivityMicrophone = (sensitivityMicrophone) => {
+    setData((prevState) => ({
+      ...prevState,
+      volum: sensitivityMicrophone,
+    }));w
   };
 
-  const stopMicrophone = () => {
-    audio.getTracks().forEach((track) => track.stop());
-    setAudio(null);
-  };
+  const getCurrentField = () => {
+    switch (type) {
+      case 1:
+        return (
+          <FieldBottomTopLine
+            isPlaying={data.isPlaying}
+            height={height}
+            onLose={onLose}
+          />
+        );
 
-  const toggleMicrophone = () => {
-    if (audio) {
-      stopMicrophone();
-    } else {
-      getMicrophone();
+      default:
+        break;
     }
   };
 
   return (
     <>
-      <Button onPress={toggleMicrophone} title={audio ? "pause" : "start"} />
-
-      <Field
-        height={height}
-        audio={audio}
-        onLose={() => {
-          setRes((prevState) => !prevState);
-          toggleMicrophone();
-        }}
-      />
+      {!isPlaying && (
+        <Button
+          onPress={() =>
+            setData((prevState) => ({
+              ...prevState,
+              isPlaying: !prevState.isPlaying,
+            }))
+          }
+          title={isPlaying ? "pause" : "start"}
+        />
+      )}
+      <View style={globalStyles.wrapperField}>
+        <FieldBottomTopLine
+          isPlaying={isPlaying}
+          height={height}
+          onLose={onLose}
+        />
+        <Settings
+          volum={volum.toFixed()}
+          sensitivityMicrophone={sensitivityMicrophone}
+          setSensitivityMicrophone={setSensitivityMicrophone}
+        />
+      </View>
     </>
   );
 };

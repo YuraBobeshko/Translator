@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, memo } from "react";
 import { View, Text, Animated, Easing } from "react-native";
 
 import styles from "./styles";
 
-const Field = ({ height, audio, onLose }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+const FieldBottomTopLine = ({ height, onLose, isPlaying }) => {
+  console.log(isPlaying);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.loop(
@@ -12,7 +13,9 @@ const Field = ({ height, audio, onLose }) => {
         toValue: 1,
         duration: 2000,
         easing: Easing.linear,
-      })
+        usenativedriver: true,
+      }),
+      { usenativedriver: true }
     ).start();
   }, [fadeAnim]);
 
@@ -25,7 +28,7 @@ const Field = ({ height, audio, onLose }) => {
       refBlock.current &&
       refLineBottom.current &&
       refLineTop.current &&
-      audio
+      isPlaying
     ) {
       if (
         refLineBottom.current.getBoundingClientRect().bottom >
@@ -38,7 +41,7 @@ const Field = ({ height, audio, onLose }) => {
       }
     }
   }, [height]);
-  console.log(fadeAnim);
+
   return (
     <View style={styles.wrapperField}>
       <Animated.View
@@ -67,7 +70,7 @@ const Field = ({ height, audio, onLose }) => {
           },
         ]}
       >
-        <Text style={styles.text}>{-(height - 700)}</Text>
+        <Text style={styles.text}>{height}</Text>
       </View>
       <Animated.View
         ref={refLineTop}
@@ -90,4 +93,4 @@ const Field = ({ height, audio, onLose }) => {
   );
 };
 
-export default Field;
+export default FieldBottomTopLine;
