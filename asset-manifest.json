@@ -1,0 +1,22 @@
+{
+  "files": {
+    "app.js": "/translator/static/js/app.41b6bb9d.chunk.js",
+    "app.js.map": "/translator/static/js/app.41b6bb9d.chunk.js.map",
+    "runtime~app.js": "/translator/static/js/runtime~app.51a1267f.js",
+    "runtime~app.js.map": "/translator/static/js/runtime~app.51a1267f.js.map",
+    "static/js/2.c7e8779b.chunk.js": "/translator/static/js/2.c7e8779b.chunk.js",
+    "static/js/2.c7e8779b.chunk.js.map": "/translator/static/js/2.c7e8779b.chunk.js.map",
+    "favicon-16.png": "/translator/favicon-16.png",
+    "favicon-32.png": "/translator/favicon-32.png",
+    "favicon.ico": "/translator/favicon.ico",
+    "index.html": "/translator/index.html",
+    "manifest.json": "/translator/manifest.json",
+    "serve.json": "/translator/serve.json",
+    "static/js/2.c7e8779b.chunk.js.LICENSE.txt": "/translator/static/js/2.c7e8779b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.51a1267f.js",
+    "static/js/2.c7e8779b.chunk.js",
+    "static/js/app.41b6bb9d.chunk.js"
+  ]
+}
